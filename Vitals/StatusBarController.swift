@@ -19,7 +19,6 @@ class StatusBarController {
         self.contentViewModel = contentViewModel
         
         statusBar = NSStatusBar.system
-        // Creating a status bar item having a fixed length
         statusItem = statusBar.statusItem(withLength: 28.0)
         
         let statusBarMenu = NSMenu(title: "Status Bar Menu")
@@ -33,7 +32,10 @@ class StatusBarController {
         statusItem.menu = statusBarMenu
         
         if let statusBarButton = statusItem.button {
-            statusBarButton.title = "📈"
+            statusBarButton.image = NSImage(named: "MenuIcon")
+            statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
+            statusBarButton.image?.isTemplate = true
+
             
             // This seems to work better than setting a target and action on the button - click events
             // come through more quickly and reliably, and it doesn't seem to get stuck on double-clicks
@@ -54,9 +56,6 @@ class StatusBarController {
                 }
                 return event
             }
-//            statusBarButton.image = #imageLiteral(resourceName: "StatusBarIcon")
-//            statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
-//            statusBarButton.image?.isTemplate = true
         }
     }
     
