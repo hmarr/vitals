@@ -57,6 +57,7 @@ class ContentViewModel: ObservableObject {
             }
             return "-"
         case .memory:
+            // TODO figure out a suitable y-axis scale
             if let v = value {
                 return String(format: "%2.1f GB", v / 1e6)
             }
@@ -76,14 +77,20 @@ struct ContentView: View {
     var body: some View {
         if viewModel.contentVisible {
             VStack(spacing: 8) {
-                Picker("Resource Type", selection: $viewModel.selectedResource) {
-                    Text("CPU").tag(ResourceType.cpu)
-                    Text("Memory").tag(ResourceType.memory)
-                    Text("Network").tag(ResourceType.network)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .labelsHidden()
-                .frame(maxWidth: 200).padding(.bottom, 5)
+//             Hide resource picker until:
+//             1. Memory usage visualisation is better - the per-process bar chart doesn't work well,
+//                at the very least the y-axis scaling needs to change.
+//             2. Support for network IO monitoring lands.
+//             ------------------------------------------------------------------------
+//                Picker("Resource Type", selection: $viewModel.selectedResource) {
+//                    Text("CPU").tag(ResourceType.cpu)
+//                    Text("Memory").tag(ResourceType.memory)
+//                    Text("Network").tag(ResourceType.network)
+//                }
+//                .pickerStyle(SegmentedPickerStyle())
+//                .labelsHidden()
+//                .frame(maxWidth: 200).padding(.bottom, 5)
+//             ------------------------------------------------------------------------
 
                 ForEach(viewModel.topProcesses, id: \.pid) { process in
                     HStack {
