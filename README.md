@@ -12,7 +12,10 @@ While other tools like Activity Monitor show you each process' _current_ CPU usa
 
 ## Install
 
-Download the [latest release](https://github.com/hmarr/vitals/releases/latest), and move it to "/Applications". Right-click the app in Finder then select "Open" from the context menu.
+1. Download and extract the zip file from the [latest GitHub release](https://github.com/hmarr/vitals/releases/latest).
+2. Drag the file called Vitals into your computer's Applications folder.
+3. Within the Applications folder, right-click the app, then select “Open” from the menu that pops up. (It's not notarised, which is why you'll need to right-click.)
+
 
 ## Usage
 
