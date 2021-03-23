@@ -14,6 +14,15 @@ Read more about why this exists [in the introductory blog post](https://hmarr.co
 
 ## Install
 
+If you have [Homebrew](https://brew.sh/), you can install it from my tap:
+
+```
+$ brew tap hmarr/tap
+$ brew install vitals
+```
+
+Otherwise, you can download the latest release manually:
+
 1. Download and extract the zip file from the [latest GitHub release](https://github.com/hmarr/vitals/releases/latest).
 2. Drag the file called Vitals into your computer's Applications folder.
 3. Within the Applications folder, right-click the app, then select “Open” from the menu that pops up. (It's not notarised, which is why you'll need to right-click.)
