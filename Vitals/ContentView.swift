@@ -76,45 +76,47 @@ struct ContentView: View {
     
     var body: some View {
         if viewModel.contentVisible {
-            VStack(spacing: 8) {
-//             Hide resource picker until:
-//             1. Memory usage visualisation is better - the per-process bar chart doesn't work well,
-//                at the very least the y-axis scaling needs to change.
-//             2. Support for network IO monitoring lands.
-//             ------------------------------------------------------------------------
-//                Picker("Resource Type", selection: $viewModel.selectedResource) {
-//                    Text("CPU").tag(ResourceType.cpu)
-//                    Text("Memory").tag(ResourceType.memory)
-//                    Text("Network").tag(ResourceType.network)
-//                }
-//                .pickerStyle(SegmentedPickerStyle())
-//                .labelsHidden()
-//                .frame(maxWidth: 200).padding(.bottom, 5)
-//             ------------------------------------------------------------------------
+            ScrollView {
+                VStack(spacing: 8) {
+//                 Hide resource picker until:
+//                 1. Memory usage visualisation is better - the per-process bar chart doesn't work well,
+//                    at the very least the y-axis scaling needs to change.
+//                 2. Support for network IO monitoring lands.
+//                 ------------------------------------------------------------------------
+//                    Picker("Resource Type", selection: $viewModel.selectedResource) {
+//                        Text("CPU").tag(ResourceType.cpu)
+//                        Text("Memory").tag(ResourceType.memory)
+//                        Text("Network").tag(ResourceType.network)
+//                    }
+//                    .pickerStyle(SegmentedPickerStyle())
+//                    .labelsHidden()
+//                    .frame(maxWidth: 200).padding(.bottom, 5)
+//                 ------------------------------------------------------------------------
 
-                ForEach(viewModel.topProcesses, id: \.pid) { process in
-                    HStack {
-                        Group {
-                            if process.isAlive {
-                                Text(process.name!)
+                    ForEach(viewModel.topProcesses, id: \.pid) { process in
+                        HStack {
+                            Group {
+                                if process.isAlive {
+                                    Text(process.name!)
 
-                            } else {
-                                Text(process.name!)
-                                    .foregroundColor(Color(NSColor.labelColor).opacity(0.5))
-                                    .italic()
-                            }
-                        }.frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        let resourceValues = process.values(forResourceType: viewModel.selectedResource)
-                        
-                        SparklineChart(values: viewModel.chartValues(resourceValues: resourceValues), color: .blue).frame(maxWidth: .infinity)
-                        
-                        Text(viewModel.formattedValue(value: resourceValues.last!))
-                            .font(Font.system(.caption).monospacedDigit())
-                            .frame(width: 45, alignment: .trailing)
+                                } else {
+                                    Text(process.name!)
+                                        .foregroundColor(Color(NSColor.labelColor).opacity(0.5))
+                                        .italic()
+                                }
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            let resourceValues = process.values(forResourceType: viewModel.selectedResource)
+                            
+                            SparklineChart(values: viewModel.chartValues(resourceValues: resourceValues), color: .blue).frame(maxWidth: .infinity)
+                            
+                            Text(viewModel.formattedValue(value: resourceValues.last!))
+                                .font(Font.system(.caption).monospacedDigit())
+                                .frame(width: 45, alignment: .trailing)
+                        }
                     }
-                }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(10)
+                }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(10)
+            }
         } else {
             EmptyView()
         }
