@@ -10,6 +10,8 @@ Vitals lives in the menu bar, keeping track of resource usage in the background 
 
 While other tools like Activity Monitor show you each process' _current_ CPU usage, Vitals shows a per-process CPU graph covering the last 60 seconds. This makes it much easier to track down apps that misbehave sporadically.
 
+Read more about why this exists [in the introductory blog post](https://hmarr.com/blog/vitals/).
+
 ## Install
 
 1. Download and extract the zip file from the [latest GitHub release](https://github.com/hmarr/vitals/releases/latest).
