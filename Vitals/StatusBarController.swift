@@ -6,10 +6,12 @@
 //
 
 import AppKit
+import LaunchAtLogin
 
 class StatusBarController {
     private var statusBar: NSStatusBar
     private var statusItem: NSStatusItem
+    private var launchAtLoginItem: NSMenuItem
     private var popover: NSPopover
     private var contentViewModel: ContentViewModel
     private var clickMonitor: Any?
@@ -22,6 +24,15 @@ class StatusBarController {
         statusItem = statusBar.statusItem(withLength: 28.0)
         
         let statusBarMenu = NSMenu(title: "Status Bar Menu")
+        
+        launchAtLoginItem = statusBarMenu.addItem(
+            withTitle: "Launch at Login",
+            action: #selector(toggleLaunchAtLogin(sender:)),
+            keyEquivalent: ""
+        )
+        launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
+        launchAtLoginItem.target = self
+        
         let quitItem = statusBarMenu.addItem(
             withTitle: "Quit Vitals",
             action: #selector(quit(sender:)),
@@ -66,6 +77,11 @@ class StatusBarController {
     
     @objc func quit(sender: AnyObject) {
         NSApplication.shared.terminate(self)
+    }
+    
+    @objc func toggleLaunchAtLogin(sender: AnyObject) {
+        LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
+        launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
     }
     
     @objc func togglePopover(sender: AnyObject) {

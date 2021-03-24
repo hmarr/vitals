@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4A0AFDCA25B341E70096B015 /* Sparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0AFDC925B341E70096B015 /* Sparkline.swift */; };
 		4A0AFDD425B359690096B015 /* ProcessMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0AFDD325B359690096B015 /* ProcessMonitor.swift */; };
+		4A10A18C260AC705004508F8 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4A10A18B260AC705004508F8 /* LaunchAtLogin */; };
 		4A267B2125BB81F300530801 /* ProcessStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A267B2025BB81F300530801 /* ProcessStats.swift */; };
 		4A267B2E25BB828700530801 /* ProcessStatsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A267B2D25BB828700530801 /* ProcessStatsWindow.swift */; };
 		4A602E4625B0FA8B008AFC7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A602E4525B0FA8B008AFC7F /* AppDelegate.swift */; };
@@ -65,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A10A18C260AC705004508F8 /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,12 +162,16 @@
 				4A602E3E25B0FA8B008AFC7F /* Sources */,
 				4A602E3F25B0FA8B008AFC7F /* Frameworks */,
 				4A602E4025B0FA8B008AFC7F /* Resources */,
+				4A41094F260ACCEB0041E834 /* Copy "Launch at Login Helper" */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Vitals;
+			packageProductDependencies = (
+				4A10A18B260AC705004508F8 /* LaunchAtLogin */,
+			);
 			productName = Vitals;
 			productReference = 4A602E4225B0FA8B008AFC7F /* Vitals.app */;
 			productType = "com.apple.product-type.application";
@@ -237,6 +243,9 @@
 				Base,
 			);
 			mainGroup = 4A602E3925B0FA8B008AFC7F;
+			packageReferences = (
+				4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+			);
 			productRefGroup = 4A602E4325B0FA8B008AFC7F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -274,6 +283,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4A41094F260ACCEB0041E834 /* Copy "Launch at Login Helper" */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy \"Launch at Login Helper\"";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4A602E3E25B0FA8B008AFC7F /* Sources */ = {
@@ -466,7 +496,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.Vitals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "${SRCROOT}/**";
@@ -492,7 +522,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.Vitals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "${SRCROOT}/**";
@@ -624,6 +654,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4A10A18B260AC705004508F8 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4A602E3A25B0FA8B008AFC7F /* Project object */;
 }
