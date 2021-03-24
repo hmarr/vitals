@@ -49,6 +49,11 @@ class StatusBarController {
                         // Never capture right clicks as we always want the menu behaviour to work
                         return event
                     } else {
+                        // Cmd + click should begin dragging the menu bar icon
+                        if event.modifierFlags.contains(.command) {
+                            return event
+                        }
+                        
                         // For left clicks, toggle the popover and capture clicks so we don't show the menu
                         self.togglePopover(sender: self)
                         return nil
