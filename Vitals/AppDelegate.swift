@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Note: we _don't_ want to make the popover's behaviour "transient" as we handle all the click
         // detection ourselves in the StatusBarController, which gives us more control
-        popover.contentSize = NSSize(width: 400, height: 360)
+        popover.contentSize = NSSize(width: 400, height: 492)
         // Put the SwiftUI content inside the popover
         popover.contentViewController = NSHostingController(rootView: contentView)
         popover.animates = false
