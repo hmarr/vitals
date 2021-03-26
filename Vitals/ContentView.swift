@@ -114,7 +114,7 @@ struct ContentView: View {
                             .frame(width: 45, alignment: .trailing)
                     }
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(10)
+            }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(EdgeInsets(top: 4, leading: 22, bottom: 4, trailing: 12))
         } else {
             EmptyView()
         }
