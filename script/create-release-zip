@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+release_dir="Vitals/$(ls -t Vitals | grep 'Vitals 20' | fzf --select-1)"
+echo "release directory = $release_dir"
+
+plist="$release_dir/Vitals.app/Contents/Info.plist"
+version=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "$plist")
+echo "version = $version"
+
+read -p "press any key to continue, or ctrl-c to cancel"
+
+cd "$release_dir"
+zip_name="vitals-v${version}.zip"
+zip -r "$zip_name" "Vitals.app"
+mv "$zip_name" "../../"
+cd "../.."
+
+echo "created $zip_name"
