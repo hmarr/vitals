@@ -22,9 +22,9 @@ class StatusBarController {
         statusItem = statusBar.statusItem(withLength: 28.0)
         
         let statusBarMenu = NSMenu(title: "Status Bar Menu")
-        
+                
         let contentItem = NSMenuItem()
-        contentView.frame = NSRect(x: 0, y: 0, width: 400, height: 500)
+        contentView.frame = NSRect(x: 0, y: 0, width: 460, height: ContentView.totalHeight)
         contentItem.view = contentView
         statusBarMenu.addItem(contentItem)
         
