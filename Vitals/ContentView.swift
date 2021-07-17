@@ -74,9 +74,21 @@ class ContentViewModel: ObservableObject {
 struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel
     
+    private static let processListHeight = 460
+    private static let topPadding = 6
+    private static let bottomPadding = 4
+    private static var leftPadding: Int {
+        if #available(macOS 10.0, *) {
+            return 12
+        }
+        return 22
+    }
+    private static let rightPadding = 12
+    static let totalHeight = topPadding + bottomPadding + processListHeight
+    
     var body: some View {
         if viewModel.contentVisible {
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
 //             Hide resource picker until:
 //             1. Memory usage visualisation is better - the per-process bar chart doesn't work well,
 //                at the very least the y-axis scaling needs to change.
@@ -114,7 +126,17 @@ struct ContentView: View {
                             .frame(width: 45, alignment: .trailing)
                     }
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(10)
+            }.frame(
+                maxWidth: .infinity,
+                maxHeight: CGFloat(ContentView.processListHeight)
+            ).padding(
+                EdgeInsets(
+                    top: CGFloat(ContentView.topPadding),
+                    leading: CGFloat(ContentView.leftPadding),
+                    bottom: CGFloat(ContentView.bottomPadding),
+                    trailing: CGFloat(ContentView.rightPadding)
+                )
+            )
         } else {
             EmptyView()
         }

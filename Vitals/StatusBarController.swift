@@ -8,16 +8,14 @@
 import AppKit
 import LaunchAtLogin
 
-class StatusBarController {
+class StatusBarController: NSObject, NSMenuDelegate {
     private var statusBar: NSStatusBar
     private var statusItem: NSStatusItem
     private var launchAtLoginItem: NSMenuItem
-    private var popover: NSPopover
     private var contentViewModel: ContentViewModel
     private var clickMonitor: Any?
     
-    init(_ popover: NSPopover, contentViewModel: ContentViewModel) {
-        self.popover = popover
+    init(contentViewModel: ContentViewModel, contentView: NSView) {
         self.contentViewModel = contentViewModel
         
         statusBar = NSStatusBar.system
@@ -25,54 +23,47 @@ class StatusBarController {
         
         let statusBarMenu = NSMenu(title: "Status Bar Menu")
         
+        let contentItem = NSMenuItem()
+        contentView.frame = NSRect(x: 0, y: 0, width: 460, height: ContentView.totalHeight)
+        contentItem.view = contentView
+        statusBarMenu.addItem(contentItem)
+        
+        statusBarMenu.addItem(.separator())
+        
         launchAtLoginItem = statusBarMenu.addItem(
             withTitle: "Launch at Login",
             action: #selector(toggleLaunchAtLogin(sender:)),
             keyEquivalent: ""
         )
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
-        launchAtLoginItem.target = self
         
         let quitItem = statusBarMenu.addItem(
             withTitle: "Quit Vitals",
             action: #selector(quit(sender:)),
             keyEquivalent: ""
         )
-        quitItem.target = self
 
         statusItem.menu = statusBarMenu
+        
+        super.init()
+        
+        statusBarMenu.delegate = self
+        launchAtLoginItem.target = self
+        quitItem.target = self
         
         if let statusBarButton = statusItem.button {
             statusBarButton.image = NSImage(named: "MenuIcon")
             statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
             statusBarButton.image?.isTemplate = true
-
-            
-            // This seems to work better than setting a target and action on the button - click events
-            // come through more quickly and reliably, and it doesn't seem to get stuck on double-clicks
-            NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { (event) -> NSEvent? in
-                if event.window == statusBarButton.window {
-                    if event.type == .rightMouseDown {
-                        // If the user right clicks when the popoup is visible, hide the popup and show the menu
-                        if popover.isShown {
-                            self.togglePopover(sender: self)
-                        }
-                        // Never capture right clicks as we always want the menu behaviour to work
-                        return event
-                    } else {
-                        // Cmd + click should begin dragging the menu bar icon
-                        if event.modifierFlags.contains(.command) {
-                            return event
-                        }
-                        
-                        // For left clicks, toggle the popover and capture clicks so we don't show the menu
-                        self.togglePopover(sender: self)
-                        return nil
-                    }
-                }
-                return event
-            }
         }
+    }
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        contentViewModel.contentVisible = true
+    }
+    
+    func menuDidClose(_ menu: NSMenu) {
+        contentViewModel.contentVisible = false
     }
     
     @objc func quit(sender: AnyObject) {
@@ -82,44 +73,5 @@ class StatusBarController {
     @objc func toggleLaunchAtLogin(sender: AnyObject) {
         LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
-    }
-    
-    @objc func togglePopover(sender: AnyObject) {
-        if popover.isShown {
-            hidePopover(sender)
-        } else {
-            showPopover(sender)
-        }
-    }
-    
-    func showPopover(_ sender: AnyObject) {
-        if let statusBarButton = statusItem.button {
-            contentViewModel.contentVisible = true
-            
-            statusItem.button?.highlight(true)
-            popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
-            popover.contentViewController?.view.window?.becomeKey()
-            
-            // Hide the popover when the user clicks outside it
-            clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { (event) in
-                // Ignore statusBarButton clicks as we already have a monitor for that
-                if event.window != statusBarButton.window {
-                    self.hidePopover(event)
-                }
-            }
-        }
-    }
-    
-    func hidePopover(_ sender: AnyObject) {
-        statusItem.button?.highlight(false)
-        popover.performClose(sender)
-        popover.contentViewController?.view.window?.resignKey()
-        
-        contentViewModel.contentVisible = false
-        
-        if let clickMonitor = clickMonitor {
-            NSEvent.removeMonitor(clickMonitor)
-            self.clickMonitor = nil
-        }
     }
 }
