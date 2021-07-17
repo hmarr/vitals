@@ -20,8 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let viewModel = ContentViewModel(monitor: processMonitor, contentVisible: true)
         let contentView = ContentView(viewModel: viewModel)
         
-        let v = NSHostingView(rootView: contentView)
-        statusBar = StatusBarController.init(contentViewModel: viewModel, contentView: v)
+        let hostingView = NSHostingView(rootView: contentView)
+        statusBar = StatusBarController(contentViewModel: viewModel, contentView: hostingView)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
