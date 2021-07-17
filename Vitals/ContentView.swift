@@ -77,6 +77,13 @@ struct ContentView: View {
     private static let processListHeight = 460
     private static let topPadding = 6
     private static let bottomPadding = 4
+    private static var leftPadding: Int {
+        if #available(macOS 10.0, *) {
+            return 12
+        }
+        return 22
+    }
+    private static let rightPadding = 12
     static let totalHeight = topPadding + bottomPadding + processListHeight
     
     var body: some View {
@@ -125,9 +132,9 @@ struct ContentView: View {
             ).padding(
                 EdgeInsets(
                     top: CGFloat(ContentView.topPadding),
-                    leading: 22,
+                    leading: CGFloat(ContentView.leftPadding),
                     bottom: CGFloat(ContentView.bottomPadding),
-                    trailing: 12
+                    trailing: CGFloat(ContentView.rightPadding)
                 )
             )
         } else {
