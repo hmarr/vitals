@@ -8,7 +8,7 @@
 import AppKit
 import LaunchAtLogin
 
-class StatusBarController {
+class StatusBarController: NSObject, NSMenuDelegate {
     private var statusBar: NSStatusBar
     private var statusItem: NSStatusItem
     private var launchAtLoginItem: NSMenuItem
@@ -22,7 +22,7 @@ class StatusBarController {
         statusItem = statusBar.statusItem(withLength: 28.0)
         
         let statusBarMenu = NSMenu(title: "Status Bar Menu")
-                
+        
         let contentItem = NSMenuItem()
         contentView.frame = NSRect(x: 0, y: 0, width: 460, height: ContentView.totalHeight)
         contentItem.view = contentView
@@ -36,22 +36,34 @@ class StatusBarController {
             keyEquivalent: ""
         )
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
-        launchAtLoginItem.target = self
         
         let quitItem = statusBarMenu.addItem(
             withTitle: "Quit Vitals",
             action: #selector(quit(sender:)),
             keyEquivalent: ""
         )
-        quitItem.target = self
 
         statusItem.menu = statusBarMenu
+        
+        super.init()
+        
+        statusBarMenu.delegate = self
+        launchAtLoginItem.target = self
+        quitItem.target = self
         
         if let statusBarButton = statusItem.button {
             statusBarButton.image = NSImage(named: "MenuIcon")
             statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
             statusBarButton.image?.isTemplate = true
         }
+    }
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        contentViewModel.contentVisible = true
+    }
+    
+    func menuDidClose(_ menu: NSMenu) {
+        contentViewModel.contentVisible = false
     }
     
     @objc func quit(sender: AnyObject) {

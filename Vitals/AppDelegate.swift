@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         processMonitor.start()
         
         // Create the SwiftUI view that provides the contents
-        let viewModel = ContentViewModel(monitor: processMonitor, contentVisible: true)
+        let viewModel = ContentViewModel(monitor: processMonitor, contentVisible: false)
         let contentView = ContentView(viewModel: viewModel)
         
         let hostingView = NSHostingView(rootView: contentView)
