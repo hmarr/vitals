@@ -51,8 +51,6 @@ class ProcessStatsWindow {
             return cpuStatWindow.array()
         case .memory:
             return memoryStatWindow.array()
-        default:
-            return cpuStatWindow.array()
         }
     }
     
@@ -62,8 +60,6 @@ class ProcessStatsWindow {
             return cpuStatWindow.aggregate
         case .memory:
             return memoryStatWindow.aggregate
-        default:
-            return cpuStatWindow.aggregate
         }
     }
     

@@ -9,9 +9,8 @@ import Foundation
 import Dispatch
 
 enum ResourceType: String, CaseIterable, Identifiable {
-    case cpu
-    case memory
-    case network
+    case cpu = "CPU"
+    case memory = "Memory"
 
     var id: String { self.rawValue }
 }
@@ -25,8 +24,11 @@ struct ProcessStatsSample {
 }
 
 func sampleProcessStats() -> [Int : ProcessStatsSample]? {
-    guard let psOutput = shell("/bin/ps", ["-e", "-c", "-o", "pid,cputime,utime,rss,comm"]) else { return nil }
     var samples = [Int : ProcessStatsSample]()
+    
+    guard let psOutput = shell("/bin/ps", ["-e", "-c", "-o", "pid,cputime,utime,rss,comm"]) else {
+        return nil
+    }
     for line in psOutput.components(separatedBy: .newlines).dropFirst() {
         if line == "" {
             continue

@@ -29,6 +29,14 @@ class ContentViewModel: ObservableObject {
         })
     }
     
+    func cycleSelectedResource(direction: Int) {
+        var i = ResourceType.allCases.firstIndex(of: selectedResource)! + direction
+        if i < 0 {
+            i += ResourceType.allCases.count
+        }
+        selectedResource = ResourceType.allCases[i % ResourceType.allCases.count]
+    }
+    
     func refreshProcesses() {
         topProcesses = monitor.topProcesses(forResourceType: selectedResource, maxResults: 20)
     }
@@ -41,11 +49,8 @@ class ContentViewModel: ObservableObject {
             }
         case .memory:
             return resourceValues.map { (val) -> Float in
-                (val ?? 0.0) / monitor.totalMemoryUsage
+                (val ?? 0.0) / (monitor.totalMemoryUsage / 4.0)
             }
-        case .network:
-            // TODO
-            return [0.0]
         }
     }
     
@@ -62,9 +67,6 @@ class ContentViewModel: ObservableObject {
                 return String(format: "%2.1f GB", v / 1e6)
             }
             return "-"
-        case .network:
-            // TODO
-            return "-"
         }
         
     }
@@ -75,7 +77,7 @@ struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel
     
     private static let processListHeight = 460
-    private static let topPadding = 6
+    private static let topPadding = 8
     private static let bottomPadding = 4
     private static var leftPadding: Int {
         if #available(macOS 11.0, *) {
@@ -88,48 +90,49 @@ struct ContentView: View {
     
     var body: some View {
         if viewModel.contentVisible {
-            VStack(spacing: 6) {
-//             Hide resource picker until:
-//             1. Memory usage visualisation is better - the per-process bar chart doesn't work well,
-//                at the very least the y-axis scaling needs to change.
-//             2. Support for network IO monitoring lands.
-//             ------------------------------------------------------------------------
-//                Picker("Resource Type", selection: $viewModel.selectedResource) {
-//                    Text("CPU").tag(ResourceType.cpu)
-//                    Text("Memory").tag(ResourceType.memory)
-//                    Text("Network").tag(ResourceType.network)
-//                }
-//                .pickerStyle(SegmentedPickerStyle())
-//                .labelsHidden()
-//                .frame(maxWidth: 200).padding(.bottom, 5)
-//             ------------------------------------------------------------------------
+            VStack {
+                HStack {
+                    Text(viewModel.selectedResource.rawValue).bold()
 
-                ForEach(viewModel.topProcesses, id: \.pid) { process in
-                    HStack {
-                        Group {
-                            if process.isAlive {
-                                Text(process.name!)
+                    Spacer()
 
-                            } else {
-                                Text(process.name!)
-                                    .foregroundColor(Color(NSColor.labelColor).opacity(0.5))
-                                    .italic()
-                            }
-                        }.frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        let resourceValues = process.values(forResourceType: viewModel.selectedResource)
-                        
-                        SparklineChart(values: viewModel.chartValues(resourceValues: resourceValues), color: .blue).frame(maxWidth: .infinity)
-                        
-                        Text(viewModel.formattedValue(value: resourceValues.last!))
-                            .font(Font.system(.caption).monospacedDigit())
-                            .frame(width: 45, alignment: .trailing)
+                    Button("􀆉") {
+                        viewModel.cycleSelectedResource(direction: -1)
+                    }.buttonStyle(BorderlessButtonStyle())
+
+                    Button("􀆊") {
+                        viewModel.cycleSelectedResource(direction: 1)
+                    }.buttonStyle(BorderlessButtonStyle())
+                }.frame(height: 20)
+
+                VStack(spacing: 6) {
+                    ForEach(viewModel.topProcesses, id: \.pid) { process in
+                        HStack {
+                            Group {
+                                if process.isAlive {
+                                    Text(process.name!)
+
+                                } else {
+                                    Text(process.name!)
+                                        .foregroundColor(Color(NSColor.labelColor).opacity(0.5))
+                                        .italic()
+                                }
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            let resourceValues = process.values(forResourceType: viewModel.selectedResource)
+                            
+                            SparklineChart(values: viewModel.chartValues(resourceValues: resourceValues), color: .blue).frame(maxWidth: .infinity)
+                            
+                            Text(viewModel.formattedValue(value: resourceValues.last!))
+                                .font(Font.system(.caption).monospacedDigit())
+                                .frame(width: 45, alignment: .trailing)
+                        }
                     }
-                }
-            }.frame(
-                maxWidth: .infinity,
-                maxHeight: CGFloat(ContentView.processListHeight)
-            ).padding(
+                }.frame(
+                    maxWidth: .infinity,
+                    maxHeight: CGFloat(ContentView.processListHeight)
+                )
+            }.padding(
                 EdgeInsets(
                     top: CGFloat(ContentView.topPadding),
                     leading: CGFloat(ContentView.leftPadding),
