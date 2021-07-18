@@ -97,7 +97,7 @@ struct ContentView: View {
     private static let bottomPadding = 4
     private static var leftPadding: Int {
         if #available(macOS 11.0, *) {
-            return 12
+            return 14
         }
         return 22
     }
