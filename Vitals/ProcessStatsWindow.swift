@@ -15,6 +15,8 @@ class ProcessStatsWindow {
     var isAlive: Bool
     private var cpuStatWindow = StatWindow()
     private var memoryStatWindow = StatWindow()
+    private var networkIngressStatWindow = StatWindow()
+    private var networkEgressStatWindow = StatWindow()
     private var lastSample: ProcessStatsSample
     private var lastSampleTime: DispatchTime
     
@@ -34,13 +36,31 @@ class ProcessStatsWindow {
             cpuStatWindow.add(element: cpuUsage)
             
             memoryStatWindow.add(element: sample.memoryResidentSet)
-        
+            
+            let hasNetworkInfo = sample.networkBytesIn != nil && sample.networkBytesOut != nil
+            let prevHasNetworkInfo = lastSample.networkBytesIn != nil && lastSample.networkBytesOut != nil
+            if hasNetworkInfo && prevHasNetworkInfo {
+                // For some reason, the `bytes_in` and `bytes_out` values returned by nettop
+                // can decrease. And that's not just the integer overflowing and resetting -
+                // they decrease by a small amount then continue increasing. I'd like to
+                // understand this better but it seems that nettop is closed source and I can't
+                // find documentation describing this behaviour. For now, `max(value, 0)` is the
+                // best we can do.
+                networkIngressStatWindow.add(element: max(sample.networkBytesIn! - lastSample.networkBytesIn!, 0))
+                networkEgressStatWindow.add(element: max(sample.networkBytesOut! - lastSample.networkBytesOut!, 0))
+            } else {
+                networkIngressStatWindow.add(element: nil)
+                networkEgressStatWindow.add(element: nil)
+            }
+            
             lastSample = sample
             lastSampleTime = sampleTime
             isAlive = true
         } else {
             cpuStatWindow.add(element: nil)
             memoryStatWindow.add(element: nil)
+            networkIngressStatWindow.add(element: nil)
+            networkEgressStatWindow.add(element: nil)
             isAlive = false
         }
     }
@@ -51,6 +71,10 @@ class ProcessStatsWindow {
             return cpuStatWindow.array()
         case .memory:
             return memoryStatWindow.array()
+        case .networkIn:
+            return networkIngressStatWindow.array()
+        case .networkOut:
+            return networkEgressStatWindow.array()
         }
     }
     
@@ -60,6 +84,10 @@ class ProcessStatsWindow {
             return cpuStatWindow.aggregate
         case .memory:
             return memoryStatWindow.aggregate
+        case .networkIn:
+            return networkIngressStatWindow.aggregate
+        case .networkOut:
+            return networkEgressStatWindow.aggregate
         }
     }
     

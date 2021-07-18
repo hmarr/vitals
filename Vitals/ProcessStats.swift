@@ -11,6 +11,8 @@ import Dispatch
 enum ResourceType: String, CaseIterable, Identifiable {
     case cpu = "CPU"
     case memory = "Memory"
+    case networkIn = "Network (download)"
+    case networkOut = "Network (upload)"
 
     var id: String { self.rawValue }
 }
@@ -21,6 +23,8 @@ struct ProcessStatsSample {
     let cpuTimeSystem: Float
     let cpuTimeTotal: Float
     let memoryResidentSet: Float
+    var networkBytesIn: Float?
+    var networkBytesOut: Float?
 }
 
 func sampleProcessStats() -> [Int : ProcessStatsSample]? {
@@ -63,6 +67,44 @@ func sampleProcessStats() -> [Int : ProcessStatsSample]? {
             memoryResidentSet: memoryResidentSet
         )
     }
+    
+    guard let nettopOutput = shell("/usr/bin/nettop", ["-P", "-L", "1", "-J", "bytes_in,bytes_out"]) else {
+        return nil
+    }
+    for line in nettopOutput.components(separatedBy: .newlines).dropFirst() {
+        if line == "" {
+            continue
+        }
+        
+        let parts = line.split(separator: ",", maxSplits: 3, omittingEmptySubsequences: true)
+        guard parts.count == 3 else {
+            print("expected 3 parts in nettop output: \(parts)")
+            continue
+        }
+        let procParts = parts[0].split(separator: ".", omittingEmptySubsequences: false)
+        guard let pid = Int(procParts.last!) else {
+            print("error parsing pid from nettop output: \(parts[0])")
+            continue
+        }
+        guard let bytesIn = Float(parts[1]) else {
+            print("error parsing bytes in from nettop output: \(parts[1])")
+            continue
+        }
+        guard let bytesOut = Float(parts[2]) else {
+            print("error parsing bytes out from nettop output: \(parts[2])")
+            continue
+        }
+
+        if var sample = samples[pid] {
+            sample.networkBytesIn = bytesIn
+            sample.networkBytesOut = bytesOut
+            samples[pid] = sample
+        } else {
+            print("process \(pid) not in sample map")
+            continue
+        }
+    }
+    
     return samples
 }
 

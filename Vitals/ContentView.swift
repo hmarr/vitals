@@ -51,6 +51,10 @@ class ContentViewModel: ObservableObject {
             return resourceValues.map { (val) -> Float in
                 (val ?? 0.0) / (monitor.totalMemoryUsage / 4.0)
             }
+        case .networkIn, .networkOut:
+            return resourceValues.map { (val) -> Float in
+                (val ?? 0.0) / 1e6
+            }
         }
     }
     
@@ -65,6 +69,18 @@ class ContentViewModel: ObservableObject {
             // TODO figure out a suitable y-axis scale
             if let v = value {
                 return String(format: "%2.1f GB", v / 1e6)
+            }
+            return "-"
+        case .networkIn, .networkOut:
+            if let v = value {
+                switch v {
+                case 0..<1e6:
+                    return String(format: "%3.0f kB", v / 1e3)
+                case 1e6..<1e9:
+                    return String(format: "%3.0f MB", v / 1e6)
+                default:
+                    return String(format: "%3.0f GB", v / 1e9)
+                }
             }
             return "-"
         }
