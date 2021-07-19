@@ -89,6 +89,7 @@ class ContentViewModel: ObservableObject {
 }
 
 
+
 struct ContentView: View {
     @ObservedObject var viewModel: ContentViewModel
     
@@ -112,13 +113,35 @@ struct ContentView: View {
 
                     Spacer()
 
-                    Button("􀆉") {
+                    Button(action: {
                         viewModel.cycleSelectedResource(direction: -1)
+                    }) {
+                        ZStack {
+                            // Extra rectangle to increase the size of the click target
+                            Rectangle().frame(width: 14, height: 16, alignment: .center).opacity(0.0)
+                            
+                            Image("chevron-left")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxHeight: 12)
+                        }
                     }.buttonStyle(BorderlessButtonStyle())
+                    .frame(width: 14, height: 16, alignment: .center)
 
-                    Button("􀆊") {
+                    Button(action: {
                         viewModel.cycleSelectedResource(direction: 1)
+                    }) {
+                        ZStack {
+                            // Extra rectangle to increase the size of the click target
+                            Rectangle().frame(width: 14, height: 16, alignment: .center).opacity(0.0)
+                            
+                            Image("chevron-right")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxHeight: 12)
+                        }
                     }.buttonStyle(BorderlessButtonStyle())
+                    .frame(width: 14, height: 16, alignment: .center)
                 }.frame(height: 20)
 
                 VStack(spacing: 6) {
