@@ -120,10 +120,17 @@ struct ContentView: View {
                             // Extra rectangle to increase the size of the click target
                             Rectangle().frame(width: 14, height: 16, alignment: .center).opacity(0.0)
                             
-                            Image("chevron-left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxHeight: 12)
+                            if #available(macOS 11.0, *) {
+                                Image(systemName: "chevron.left")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxHeight: 12)
+                            } else {
+                                Image("chevron-left")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxHeight: 12)
+                            }
                         }
                     }.buttonStyle(BorderlessButtonStyle())
                     .frame(width: 14, height: 16, alignment: .center)
@@ -135,10 +142,17 @@ struct ContentView: View {
                             // Extra rectangle to increase the size of the click target
                             Rectangle().frame(width: 14, height: 16, alignment: .center).opacity(0.0)
                             
-                            Image("chevron-right")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxHeight: 12)
+                            if #available(macOS 11.0, *) {
+                                Image(systemName: "chevron.right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxHeight: 12)
+                            } else {
+                                Image("chevron-right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxHeight: 12)
+                            }
                         }
                     }.buttonStyle(BorderlessButtonStyle())
                     .frame(width: 14, height: 16, alignment: .center)
