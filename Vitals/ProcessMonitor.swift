@@ -11,6 +11,7 @@ import Combine
 class ProcessMonitor: ObservableObject {
     var didUpdate = PassthroughSubject<Void, Never>()
     var totalMemoryUsage: Float = 0.0
+    var networkStats: Bool = true
     
     private var statsWindowsByPid: [Int : ProcessStatsWindow] = [:]
     private var timer: Timer?
@@ -34,7 +35,7 @@ class ProcessMonitor: ObservableObject {
     }
     
     func update() {
-        guard let latestSamples = sampleProcessStats() else {
+        guard let latestSamples = sampleProcessStats(networkStats: networkStats) else {
             print("error retreiving process stats sample")
             return
         }

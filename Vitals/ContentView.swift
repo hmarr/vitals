@@ -19,6 +19,18 @@ class ContentViewModel: ObservableObject {
             }
         }
     }
+    @Published var networkStats: Bool = true {
+        didSet {
+            self.monitor.networkStats = self.networkStats
+            
+            // If we're disabling network stats, flip back to another pane
+            if !self.networkStats {
+                if self.selectedResource == .networkIn || self.selectedResource == .networkOut {
+                    self.selectedResource = .cpu
+                }
+            }
+        }
+    }
     @Published var topProcesses: [ProcessStatsWindow] = []
     @Published var selectedResource: ResourceType = .cpu {
         didSet {
@@ -31,6 +43,7 @@ class ContentViewModel: ObservableObject {
     init(monitor: ProcessMonitor, contentVisible: Bool) {
         self.monitor = monitor
         self.contentVisible = contentVisible
+        self.networkStats = monitor.networkStats
         self.refreshProcesses()
         self.cancellable = monitor.didUpdate.sink(receiveValue: { [weak self] in
             if let self = self {
@@ -42,11 +55,12 @@ class ContentViewModel: ObservableObject {
     }
     
     func cycleSelectedResource(direction: Int) {
+        let cases = networkStats ? ResourceType.allCases : [.cpu, .memory]
         var i = ResourceType.allCases.firstIndex(of: selectedResource)! + direction
         if i < 0 {
-            i += ResourceType.allCases.count
+            i += cases.count
         }
-        selectedResource = ResourceType.allCases[i % ResourceType.allCases.count]
+        selectedResource = cases[i % cases.count]
     }
     
     func refreshProcesses() {
@@ -99,7 +113,6 @@ class ContentViewModel: ObservableObject {
         
     }
 }
-
 
 
 struct ContentView: View {

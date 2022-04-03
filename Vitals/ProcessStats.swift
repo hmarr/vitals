@@ -27,7 +27,7 @@ struct ProcessStatsSample {
     var networkBytesOut: Float?
 }
 
-func sampleProcessStats() -> [Int : ProcessStatsSample]? {
+func sampleProcessStats(networkStats: Bool) -> [Int : ProcessStatsSample]? {
     var samples = [Int : ProcessStatsSample]()
     
     guard let psOutput = shell("/bin/ps", ["-e", "-c", "-o", "pid,cputime,utime,rss,comm"]) else {
@@ -68,6 +68,10 @@ func sampleProcessStats() -> [Int : ProcessStatsSample]? {
         )
     }
     
+    if !networkStats {
+        return samples
+    }
+    
     guard let nettopOutput = shell("/usr/bin/nettop", ["-P", "-L", "1", "-J", "bytes_in,bytes_out"]) else {
         return nil
     }
@@ -75,7 +79,7 @@ func sampleProcessStats() -> [Int : ProcessStatsSample]? {
         if line == "" {
             continue
         }
-        
+
         let parts = line.split(separator: ",", maxSplits: 3, omittingEmptySubsequences: true)
         guard parts.count == 3 else {
             print("expected 3 parts in nettop output: \(parts)")
@@ -160,14 +164,4 @@ func parsePsTime(_ psTime: String) -> Float? {
     
     // Add accumulated hundredths
     return Float(timeHundredths + acc) / 100.0
-
-// Old slower implementation:
-//    let fractionalParts = psTime.split(separator: ".", maxSplits: 1)
-//    guard let hundredths = Int(fractionalParts[1]) else { return nil }
-//
-//    let minSecParts = fractionalParts[0].split(separator: ":", maxSplits: 1)
-//    guard let mins = Int(minSecParts[0]) else { return nil }
-//    guard let secs = Int(minSecParts[1]) else { return nil }
-//
-//    return Float(mins) * 60.0 + Float(secs) + Float(hundredths) / 100.0
 }

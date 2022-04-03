@@ -12,6 +12,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private var statusBar: NSStatusBar
     private var statusItem: NSStatusItem
     private var launchAtLoginItem: NSMenuItem
+    private var networkStatsItem: NSMenuItem
     private var contentViewModel: ContentViewModel
     private var clickMonitor: Any?
     
@@ -37,6 +38,15 @@ class StatusBarController: NSObject, NSMenuDelegate {
         )
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
         
+        networkStatsItem = statusBarMenu.addItem(
+            withTitle: "Enable Network Statistics",
+            action: #selector(toggleNetworkStats(sender:)),
+            keyEquivalent: ""
+        )
+        let networkStatsStatus = UserDefaults.standard.bool(forKey: "networkStatsEnabled")
+        networkStatsItem.state = networkStatsStatus ? .on : .off
+        self.contentViewModel.networkStats = networkStatsStatus
+        
         let quitItem = statusBarMenu.addItem(
             withTitle: "Quit Vitals",
             action: #selector(quit(sender:)),
@@ -49,6 +59,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
         
         statusBarMenu.delegate = self
         launchAtLoginItem.target = self
+        networkStatsItem.target = self
         quitItem.target = self
         
         if let statusBarButton = statusItem.button {
@@ -73,5 +84,12 @@ class StatusBarController: NSObject, NSMenuDelegate {
     @objc func toggleLaunchAtLogin(sender: AnyObject) {
         LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
+    
+    @objc func toggleNetworkStats(sender: AnyObject) {
+        let newValue = !UserDefaults.standard.bool(forKey: "networkStatsEnabled")
+        UserDefaults.standard.set(newValue, forKey: "networkStatsEnabled")
+        networkStatsItem.state = newValue ? .on : .off
+        self.contentViewModel.networkStats = newValue
     }
 }
