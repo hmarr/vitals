@@ -28,7 +28,9 @@ class ProcessMonitor: ObservableObject {
     }
     
     @objc func fireTimer() {
-        update()
+        DispatchQueue.global().async {
+            self.update()
+        }
     }
     
     func update() {
@@ -57,7 +59,9 @@ class ProcessMonitor: ObservableObject {
             }
         }
         
-        didUpdate.send()
+        DispatchQueue.main.async {
+            self.didUpdate.send()
+        }
     }
     
     func topProcesses(forResourceType: ResourceType, maxResults: Int) -> [ProcessStatsWindow] {
