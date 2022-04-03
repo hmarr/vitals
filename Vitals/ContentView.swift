@@ -12,11 +12,19 @@ class ContentViewModel: ObservableObject {
     let monitor: ProcessMonitor
     var cancellable: AnyCancellable?
     
-    @Published var contentVisible: Bool = false
+    @Published var contentVisible: Bool = false {
+        didSet {
+            if contentVisible {
+                self.refreshProcesses()
+            }
+        }
+    }
     @Published var topProcesses: [ProcessStatsWindow] = []
     @Published var selectedResource: ResourceType = .cpu {
         didSet {
-            self.refreshProcesses()
+            if contentVisible {
+                self.refreshProcesses()
+            }
         }
     }
     
@@ -24,8 +32,12 @@ class ContentViewModel: ObservableObject {
         self.monitor = monitor
         self.contentVisible = contentVisible
         self.refreshProcesses()
-        self.cancellable = monitor.didUpdate.sink(receiveValue: {
-            self.refreshProcesses()
+        self.cancellable = monitor.didUpdate.sink(receiveValue: { [weak self] in
+            if let self = self {
+                if self.contentVisible {
+                    self.refreshProcesses()
+                }
+            }
         })
     }
     
