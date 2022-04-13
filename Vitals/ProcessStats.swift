@@ -104,7 +104,9 @@ func sampleProcessStats(networkStats: Bool) -> [Int : ProcessStatsSample]? {
             sample.networkBytesOut = bytesOut
             samples[pid] = sample
         } else {
-            print("process \(pid) not in sample map")
+            if pid != 0 {
+                print("process \(pid) not in sample map")
+            }
             continue
         }
     }
