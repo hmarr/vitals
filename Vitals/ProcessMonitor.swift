@@ -12,6 +12,7 @@ class ProcessMonitor: ObservableObject {
     var didUpdate = PassthroughSubject<Void, Never>()
     var totalMemoryUsage: Float = 0.0
     var networkStats: Bool = true
+    var queue: DispatchQueue = DispatchQueue(label: "vitals.ProcessMonitor.queue")
     
     private var statsWindowsByPid: [Int : ProcessStatsWindow] = [:]
     private var timer: Timer?
@@ -29,7 +30,7 @@ class ProcessMonitor: ObservableObject {
     }
     
     @objc func fireTimer() {
-        DispatchQueue.global().async {
+        queue.async {
             self.update()
         }
     }
