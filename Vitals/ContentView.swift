@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class ContentViewModel: ObservableObject {
     let monitor: ProcessMonitor
     var cancellable: AnyCancellable?

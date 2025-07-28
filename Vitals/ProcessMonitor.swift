@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+@MainActor
 class ProcessMonitor: ObservableObject {
     var didUpdate = PassthroughSubject<Void, Never>()
     var totalMemoryUsage: Float = 0.0
@@ -31,7 +32,9 @@ class ProcessMonitor: ObservableObject {
     
     @objc func fireTimer() {
         queue.async {
-            self.update()
+            Task { @MainActor in
+                self.update()
+            }
         }
     }
     

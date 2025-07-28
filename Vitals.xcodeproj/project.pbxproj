@@ -3,13 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4A0AFDCA25B341E70096B015 /* Sparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0AFDC925B341E70096B015 /* Sparkline.swift */; };
 		4A0AFDD425B359690096B015 /* ProcessMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0AFDD325B359690096B015 /* ProcessMonitor.swift */; };
-		4A10A18C260AC705004508F8 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 4A10A18B260AC705004508F8 /* LaunchAtLogin */; };
 		4A267B2125BB81F300530801 /* ProcessStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A267B2025BB81F300530801 /* ProcessStats.swift */; };
 		4A267B2E25BB828700530801 /* ProcessStatsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A267B2D25BB828700530801 /* ProcessStatsWindow.swift */; };
 		4A602E4625B0FA8B008AFC7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A602E4525B0FA8B008AFC7F /* AppDelegate.swift */; };
@@ -66,7 +65,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A10A18C260AC705004508F8 /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,7 +160,6 @@
 				4A602E3E25B0FA8B008AFC7F /* Sources */,
 				4A602E3F25B0FA8B008AFC7F /* Frameworks */,
 				4A602E4025B0FA8B008AFC7F /* Resources */,
-				4A41094F260ACCEB0041E834 /* Copy "Launch at Login Helper" */,
 			);
 			buildRules = (
 			);
@@ -170,7 +167,6 @@
 			);
 			name = Vitals;
 			packageProductDependencies = (
-				4A10A18B260AC705004508F8 /* LaunchAtLogin */,
 			);
 			productName = Vitals;
 			productReference = 4A602E4225B0FA8B008AFC7F /* Vitals.app */;
@@ -218,8 +214,9 @@
 		4A602E3A25B0FA8B008AFC7F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1230;
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					4A602E4125B0FA8B008AFC7F = {
 						CreatedOnToolsVersion = 12.3;
@@ -244,7 +241,6 @@
 			);
 			mainGroup = 4A602E3925B0FA8B008AFC7F;
 			packageReferences = (
-				4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 			);
 			productRefGroup = 4A602E4325B0FA8B008AFC7F /* Products */;
 			projectDirPath = "";
@@ -283,27 +279,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4A41094F260ACCEB0041E834 /* Copy "Launch at Login Helper" */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy \"Launch at Login Helper\"";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4A602E3E25B0FA8B008AFC7F /* Sources */ = {
@@ -397,9 +372,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UCJPGY3HT2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -458,9 +436,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = UCJPGY3HT2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -486,8 +467,8 @@
 				CODE_SIGN_ENTITLEMENTS = Vitals/Vitals.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Vitals/Preview Content\"";
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Vitals/Info.plist;
@@ -495,12 +476,12 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.Vitals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "${SRCROOT}/**";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -512,8 +493,8 @@
 				CODE_SIGN_ENTITLEMENTS = Vitals/Vitals.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Vitals/Preview Content\"";
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Vitals/Info.plist;
@@ -521,30 +502,29 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.Vitals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_INCLUDE_PATHS[arch=*]" = "${SRCROOT}/**";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
 		4A602E6F25B0FA8D008AFC7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = VitalsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.VitalsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -555,18 +535,17 @@
 		4A602E7025B0FA8D008AFC7F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = VitalsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.VitalsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -577,16 +556,16 @@
 		4A602E7225B0FA8D008AFC7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = VitalsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.VitalsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -597,16 +576,16 @@
 		4A602E7325B0FA8D008AFC7F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = UCJPGY3HT2;
+				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = VitalsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hmarr.VitalsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -654,25 +633,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4A10A18B260AC705004508F8 /* LaunchAtLogin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A10A18A260AC705004508F8 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
-			productName = LaunchAtLogin;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4A602E3A25B0FA8B008AFC7F /* Project object */;
 }

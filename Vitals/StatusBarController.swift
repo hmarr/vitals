@@ -6,7 +6,27 @@
 //
 
 import AppKit
-import LaunchAtLogin
+import ServiceManagement
+
+struct LaunchAtLogin {
+    static var isEnabled: Bool {
+        get { SMAppService.mainApp.status == .enabled }
+        set {
+            do {
+                if newValue {
+                    if SMAppService.mainApp.status == .enabled {
+                        try? SMAppService.mainApp.unregister()
+                    }
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+            } catch {
+                print("Failed to \(newValue ? "enable" : "disable") launch at login: \(error.localizedDescription)")
+            }
+        }
+    }
+}
 
 class StatusBarController: NSObject, NSMenuDelegate {
     private var statusBar: NSStatusBar
@@ -16,7 +36,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private var contentViewModel: ContentViewModel
     private var clickMonitor: Any?
     
-    init(contentViewModel: ContentViewModel, contentView: NSView) {
+    @MainActor init(contentViewModel: ContentViewModel, contentView: NSView) {
         self.contentViewModel = contentViewModel
         
         statusBar = NSStatusBar.system
@@ -77,16 +97,16 @@ class StatusBarController: NSObject, NSMenuDelegate {
         contentViewModel.contentVisible = false
     }
     
-    @objc func quit(sender: AnyObject) {
+    @MainActor @objc func quit(sender: AnyObject) {
         NSApplication.shared.terminate(self)
     }
     
-    @objc func toggleLaunchAtLogin(sender: AnyObject) {
+    @MainActor @objc func toggleLaunchAtLogin(sender: AnyObject) {
         LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
     }
     
-    @objc func toggleNetworkStats(sender: AnyObject) {
+    @MainActor @objc func toggleNetworkStats(sender: AnyObject) {
         let newValue = !UserDefaults.standard.bool(forKey: "networkStatsEnabled")
         UserDefaults.standard.set(newValue, forKey: "networkStatsEnabled")
         networkStatsItem.state = newValue ? .on : .off

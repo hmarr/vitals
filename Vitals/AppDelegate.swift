@@ -11,7 +11,7 @@ import SwiftUI
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBar: StatusBarController?
-    let processMonitor = ProcessMonitor()
+    @MainActor let processMonitor = ProcessMonitor()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         processMonitor.start()
